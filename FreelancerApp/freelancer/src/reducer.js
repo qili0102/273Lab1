@@ -12,10 +12,11 @@ function reducerApp(state, action){
     switch(action.type){
         case "SignIn":
             alert("In");
-            return Object.assign({},state,{login:true});
-        case "SignUp":
-            alert("Up");
-            return Object.assign({},state,{login:false});
+            return Object.assign({},state,action.payload);
+        case "SignOut":
+            alert("Out");
+            sessionStorage.removeItem('User');
+            return Object.assign({},state,initialState);
         default:
             return state;
     }

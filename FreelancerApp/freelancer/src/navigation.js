@@ -1,15 +1,12 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {signinAction, signupAction} from './actions'
+import {signoutAction} from './actions'
 import store from './store'
+import {Link, withRouter} from 'react-router-dom'
 
 class NavBar extends React.Component{
     constructor(props){
         super(props);
-    }
-
-    click(){
-        this.props.testClick();
     }
 
     signclick(){
@@ -20,9 +17,9 @@ class NavBar extends React.Component{
         if(!this.props.login){
             return (
                 <ul className="nav navbar-nav">
-                        <li className="active"><a href="#">Home</a></li>
-                        <li onClick={this.click.bind(this)}><a href="#" >Sign In</a></li>
-                        <li ><a href="#">Sign Up</a></li>
+                        <li className="active"><Link to="/">Home</Link></li>
+                        <li ><Link to="/login">Sign In</Link></li>
+                        <li ><Link to="/register">Sign Up</Link></li>
                 </ul>
             );
         }
@@ -33,8 +30,8 @@ class NavBar extends React.Component{
         if(this.props.login){
             return (
                 <ul className="nav navbar-nav">
-                        <li className="active"><a href="#">Home</a></li>
-                        <li onClick={this.signclick.bind(this)}><a href="#" >Sign Out</a></li>
+                        <li className="active"><Link to="/">Home</Link></li>
+                        <li onClick={this.signclick.bind(this)}><Link to="/login">Sign Out</Link></li>
                         <li ><a href="#">My Account</a></li>
                 </ul>
             );
@@ -54,7 +51,6 @@ class NavBar extends React.Component{
                 {loginNav }
                 {inNav }
                 </div>
-                {this.props.username}
             </nav>
         )
     }
@@ -62,8 +58,7 @@ class NavBar extends React.Component{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        testClick: () => dispatch(signinAction("SignIn")),
-        signupClick: () => dispatch(signupAction("SignUp"))
+        signupClick: () => dispatch(signoutAction())
     };
 }
 
@@ -75,9 +70,9 @@ const mapStateToProps = (state) => {
     };
 }
 
-const DefaultApp = connect(
+const DefaultApp = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(NavBar)
+)(NavBar))
 
 export default DefaultApp;

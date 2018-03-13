@@ -1,8 +1,11 @@
-export function signinAction() {
-    return {type: "SignIn"};
+export function signinAction(payload) {
+    return {
+        type: "SignIn",
+        payload
+    };
 }
 
-export function signupAction() {
-    return {type: "SignUp"};
+export function signoutAction() {
+    return {type: "SignOut"};
 }
 
