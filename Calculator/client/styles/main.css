@@ -24,9 +24,14 @@ body{
 }
 
 .screen-row input{
-    margin: 0%;
     width: 100%;
-    border: 0px;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 24px;
+    text-align: right; 
 }
 
 .button-row{
