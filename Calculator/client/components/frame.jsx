@@ -1,6 +1,7 @@
 import React from 'react';
 import Screen from './screen';
 import Button from './button';
+import axios from 'axios';
 
 class Frame extends React.Component{
     constructor(){
@@ -17,8 +18,12 @@ class Frame extends React.Component{
         const value = event.target.value;
         switch(value){
             case '=':{
-                const result=eval(this.state.equation).toString();
-                this.setState({result});
+                // const result=eval(this.state.equation).toString();
+                axios.post('/cal',{equation:this.state.equation}).then(({data})=>{
+                    const res_data = data.data+'';
+                    this.setState({result:res_data});
+                }
+                );
                 break;
             }
             case 'C':{
