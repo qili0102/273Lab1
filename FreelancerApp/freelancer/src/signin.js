@@ -20,7 +20,7 @@ class LogIn extends React.Component{
 
     click(event){
         event.preventDefault();
-        alert("click");
+        // alert("click");
         // axios.post('/adduser',{
         //     username : this.refs['username'].value,
         //     password: this.refs['pwd'].value
@@ -34,7 +34,7 @@ class LogIn extends React.Component{
         this.getUser().then(response=>status = response.status)
         // if (status=="200") {
             this.props.testclick({login:true,username:this.refs['username'].value, password:this.refs['pwd'].value})
-            alert(store.getState().login);
+            // alert(store.getState().login);
         // }
         sessionStorage.setItem('User',store.getState().username);
     }
@@ -61,6 +61,7 @@ class LogIn extends React.Component{
             )
         }
         else{
+            this.props.testclick({login:true,username:this.props.username, password:this.props.password})
             return (
                 <Redirect to="/" />
             );

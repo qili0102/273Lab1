@@ -17,7 +17,7 @@ class NavBar extends React.Component{
         if(!this.props.login){
             return (
                 <ul className="nav navbar-nav">
-                        <li className="active"><Link to="/">Home</Link></li>
+                        <li ><Link to="/">Home</Link></li>
                         <li ><Link to="/login">Sign In</Link></li>
                         <li ><Link to="/register">Sign Up</Link></li>
                 </ul>
@@ -30,7 +30,7 @@ class NavBar extends React.Component{
         if(this.props.login){
             return (
                 <ul className="nav navbar-nav">
-                        <li className="active"><Link to="/">Home</Link></li>
+                        <li ><Link to="/">Home</Link></li>
                         <li onClick={this.signclick.bind(this)}><Link to="/login">Sign Out</Link></li>
                         <li ><a href="#">My Account</a></li>
                 </ul>

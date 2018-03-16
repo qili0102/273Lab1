@@ -15,7 +15,7 @@ class Signup extends React.Component{
 
     click(event){
         event.preventDefault();
-        alert("click");
+        // alert("click");
         // axios.post('/adduser',{
         //     username : this.refs['username'].value,
         //     password: this.refs['pwd'].value
