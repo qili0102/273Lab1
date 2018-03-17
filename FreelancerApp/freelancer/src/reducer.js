@@ -1,22 +1,43 @@
+import axios from 'axios';
+
 const initialState={
     login: false,
-    username: null,
-    password: null
+    user_info: null,
+    projects:[],
+    bids:[]
 }
 
 function reducerApp(state, action){
     if (typeof state === "undefined") {
         return initialState;
     }
-
+    
     switch(action.type){
         case "SignIn":
-            // alert("In");
-            return Object.assign({},state,action.payload);
+            let user;
+            axios.post('/getuser', action.payload).then(
+            (res)=>{
+                user = res.data;
+                if (user.password==action.payload.password) {
+                    console.log("login successful");
+                    return Object.assign({},state,{user_info:user, login: true});
+                } else {
+                    console.log("login failure");
+                    return Object.assign({},state,initialState);
+                }
+            }
+            );
         case "SignOut":
-            // alert("Out");
             sessionStorage.removeItem('User');
             return Object.assign({},state,initialState);
+        case "GetUser":
+            axios.post('/getuser', 
+                action.payload
+            ).then(
+            (res)=>{
+                return Object.assign({},state,{user_info:res.data});
+            }
+            );
         default:
             return state;
     }

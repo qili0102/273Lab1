@@ -118,6 +118,14 @@ app.post('/getbid', function(req, res){
     );
 });
 
+app.get('/api/img', function (req, res) {
+    res.sendFile('public/img/'+req.param('path'));
+});
+
+app.get('/api/file', function (req, res) {
+    res.sendFile('public/file/'+req.param('path'));
+});
+
 //     app.post('/comfirm', function(req, res){
 //         console.log("user login");
 //         var username = req.body.username;

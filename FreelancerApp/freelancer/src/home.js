@@ -1,9 +1,10 @@
 import React from 'react';
+import store from './store';
 
 class Home extends React.Component{
     render(){
-        fetch('/index').then(res=>res.json())
-        .then(json=>console.log(json.message));
+        // fetch('/index').then(res=>res.json())
+        // .then(json=>console.log(json.message));
         let user = sessionStorage.getItem('User');
         if (user!=null) {
             return (

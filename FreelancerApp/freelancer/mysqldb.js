@@ -35,13 +35,13 @@ const select_bid_by_id = "select * from "+bids_table+" where id = ?";
 
 const insert_user = "INSERT INTO "+users_table+" (email, username, password, img_path, desc, skills, post_prj, bid_prj) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 const insert_project = "INSERT INTO "+projects_table+" (title, desc, file_path, skills, budget_range, post_user, status, bid_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-const insert_bid = "INSERT INTO "+users_table+" (user, project, price, period, won) VALUES (?, ?, ?, ?, ?)";
+const insert_bid = "INSERT INTO "+bids_table+" (user, project, price, period, won) VALUES (?, ?, ?, ?, ?)";
 
 const update_user = "UPDATE "+users_table+" SET username=?, password=?, img_path=?, desc=?, skills=?, post_prj=?, bid_prj=? WHERE email=?";
-const update_project = "UPDATE "+users_table+" SET title=?, desc=?, file_path=?, skills=?, budget_range=?, post_user=?, status=?, bid=? WHERE id=?";
+const update_project = "UPDATE "+projects_table+" SET title=?, desc=?, file_path=?, skills=?, budget_range=?, post_user=?, status=?, bid=? WHERE id=?";
 const update_bids = "UPDATE "+bids_table+" SET user=?, project=?, price=?, period=?, won=? WHERE id=?";
 
-const get_avg_bid="SELECT AVG(price) AS avgbid FROM "+bids_table+" WHERE user=?";
+const get_avg_bid="SELECT AVG(price) AS avgbid FROM "+bids_table+" WHERE project=?";
 
 exports.getUser=function (email, res) {
     pool.getConnection(function (err, connection) {
