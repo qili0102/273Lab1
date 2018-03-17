@@ -60,15 +60,25 @@ function requestHandler(request, response) {
         var result;
 
         request.on('data', function (data) {
+            // console.log(data);
             jsonString += data;
         });
 
         request.on('end', function (err) {
-            console.log(JSON.parse(jsonString));
-            console.log(JSON.parse(jsonString).equation);
-            result = {data :(eval(JSON.parse(jsonString).equation)+'')};
-            console.log(result);
-
+            try {
+                console.log(JSON.parse(jsonString));
+                let obj = JSON.parse(jsonString);
+                console.log(obj.equation);
+                result = {data :(eval(obj.equation)+'')};
+                console.log(result);
+            } catch (error) {
+                console.log("err");
+                jsonString = JSON.stringify(jsonString);
+                console.log(jsonString);
+                console.log(JSON.parse(jsonString)[equation]);
+                result = {data :(eval(JSON.parse(jsonString)[equation])+'')};
+            }
+            
             response.writeHead(200, {"Content-Type":"application/json"});
             response.write(JSON.stringify(result));
             response.end();
