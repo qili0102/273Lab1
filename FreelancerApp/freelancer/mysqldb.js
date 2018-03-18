@@ -47,6 +47,7 @@ exports.getUser=function (email, res) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
@@ -54,7 +55,10 @@ exports.getUser=function (email, res) {
                 connection.release();
                 if (!err) {
                     console.log(results[0]);
-                    res.send(results[0]);
+                    res.status(200).send(results[0]);
+                }else{
+                    res.status(400).send('not geting the right user');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -69,6 +73,7 @@ exports.getProject=function (id, res) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
@@ -76,7 +81,10 @@ exports.getProject=function (id, res) {
                 connection.release();
                 if (!err) {
                     console.log(results[0]);
-                    res.send(results[0]);
+                    res.status(200).send(results[0]);
+                }else{
+                    res.status(400).send('project getting error');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -98,7 +106,11 @@ exports.getBid=function (id, res) {
                 connection.release();
                 if (!err) {
                     console.log(results[0]);
-                    res.send(results[0]);
+                    res.status(200).send(results[0]);
+                }
+                else{
+                    res.status(400).send('bid getting failure');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -109,18 +121,22 @@ exports.getBid=function (id, res) {
     })
 };
 
-exports.getAvgBid=function (email, res) {
+exports.getAvgBid=function (project, res) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
-            connection.query(get_avg_bid,[email], function (err, results) {
+            connection.query(get_avg_bid,[project], function (err, results) {
                 connection.release();
                 if (!err) {
                     console.log(results[0]);
-                    res.send(results[0]);
+                    res.status(200).send(results[0]);
+                }else{
+                    res.status(400).send('cannot get the avg bid');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -135,6 +151,7 @@ exports.addUser=function (email, username, password, img_path, desc, skills, pos
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(500).send('db failed');
             return;
         }else{
             console.log("db connected");
@@ -142,7 +159,11 @@ exports.addUser=function (email, username, password, img_path, desc, skills, pos
                 connection.release();
                 if (!err) {
                     console.log("inserted");
-                    res.status(201);
+                    res.status(201).send('inserted');
+                }
+                else{
+                    res.status(201).send('insert failed');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -157,6 +178,7 @@ exports.addProject=function (title, desc, file_path, skills, budget_range, post_
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
@@ -164,7 +186,11 @@ exports.addProject=function (title, desc, file_path, skills, budget_range, post_
                 connection.release();
                 if (!err) {
                     console.log("inserted");
-                    res.status(201);
+                    res.status(201).send('inserted');
+                }
+                else{
+                    res.status(400).send('add project failed');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -179,6 +205,7 @@ exports.addBid=function (user, project, price, period, won, res) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
@@ -186,7 +213,10 @@ exports.addBid=function (user, project, price, period, won, res) {
                 connection.release();
                 if (!err) {
                     console.log("inserted");
-                    res.status(201);
+                    res.status(201).send('inserted');
+                }else{
+                    res.status(400).send('bid inserted fail');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -201,14 +231,18 @@ exports.updateUser=function (email, username, password, img_path, desc, skills, 
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db failed');
             return;
         }else{
             console.log("db connected");
             connection.query(update_user,[username, password, img_path, desc, skills, post_prj, bid_prj, email], function (err, results) {
                 connection.release();
                 if (!err) {
-                    console.log("inserted");
-                    res.status(202);
+                    console.log("updated");
+                    res.status(202).send('updated');
+                }else{
+                    res.status(400).send('updated failed');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -223,14 +257,18 @@ exports.updateProject=function (id, title, desc, file_path, skills, budget_range
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db connect failed');
             return;
         }else{
             console.log("db connected");
             connection.query(insert_project,[title, desc, file_path, skills, budget_range, post_user, status, bid_id, id], function (err, results) {
                 connection.release();
                 if (!err) {
-                    console.log("inserted");
-                    res.status(201);
+                    console.log("updated");
+                    res.status(202).send('updated');
+                }else{
+                    res.status(400).send('updated failed');
+                    return;
                 }
             });
             connection.on('error', function (err) {
@@ -245,14 +283,18 @@ exports.updateBid=function (id, user, project, price, period, won, res) {
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("db connection failed");
+            res.status(400).send('db connect failed');
             return;
         }else{
             console.log("db connected");
             connection.query(update_bids,[user, project, price, period, won, id], function (err, results) {
                 connection.release();
                 if (!err) {
-                    console.log("inserted");
-                    res.status(201);
+                    console.log("updated");
+                    res.status(202).send('updated');
+                }else{
+                    res.status(400).send('updated failed');
+                    return;
                 }
             });
             connection.on('error', function (err) {

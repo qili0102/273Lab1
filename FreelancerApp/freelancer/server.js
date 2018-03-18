@@ -89,7 +89,7 @@ app.post('/updatebid', function(req, res){
 app.post('/avgbid', function(req, res){
     console.log("average bid");
     db.getAvgBid(
-        req.body.email, 
+        req.body.project, 
         res
     );
 });

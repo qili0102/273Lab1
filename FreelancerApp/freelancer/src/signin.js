@@ -26,7 +26,7 @@ class LogIn extends React.Component{
         // let status;
         // this.getUser().then(response=>status = response.status)
         // if (status=="200") {
-            // this.props.userclick({email:this.refs['email'].value});
+            this.props.userclick({email:this.refs['email'].value});
         // }
         sessionStorage.setItem('User',store.getState().username);
     }
