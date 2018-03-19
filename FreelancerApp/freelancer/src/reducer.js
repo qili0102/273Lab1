@@ -13,31 +13,18 @@ function reducerApp(state, action){
     }
     
     switch(action.type){
-        case "SignIn":
-            let user;
-            axios.post('/getuser', action.payload).then(
-            (res)=>{
-                user = res.data;
-                if (user.password==action.payload.password) {
-                    console.log("login successful");
-                    return Object.assign({},state,{user_info:user, login: true});
-                } else {
-                    console.log("login failure");
-                    return Object.assign({},state,initialState);
-                }
-            }
-            );
+        case "SetUser":
+            sessionStorage.setItem('User',action.payload.username);
+            sessionStorage.setItem('Email',action.payload.email);
+            return Object.assign({},{login: true, user_info:action.payload});
         case "SignOut":
             sessionStorage.removeItem('User');
+            sessionStorage.removeItem('Email');
             return Object.assign({},state,initialState);
-        case "GetUser":
-            axios.post('/getuser', 
-                action.payload
-            ).then(
-            (res)=>{
-                return Object.assign({},state,{user_info:res.data});
-            }
-            );
+        case "SetProject":
+            return Object.assign({},{login: true, projects:action.payload});
+        case "SetBid":
+            return Object.assign({},{login: true, bids:action.payload});
         default:
             return state;
     }

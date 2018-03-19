@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 
 app.post('/adduser', function(req, res){
     console.log("Adding user");
+    console.log(req.body.email);
     db.addUser(req.body.email, req.body.username, 
         req.body.password, req.body.img_path,
         req.body.desc, req.body.skills, 
@@ -104,8 +105,31 @@ app.post('/getuser', function(req, res){
 
 app.post('/getproject', function(req, res){
     console.log("get project");
-    db.getUser(
+    db.getProject(
         req.body.id, 
+        res
+    );
+});
+
+app.post('/getprojectbyuser', function(req, res){
+    console.log("get project");
+    db.getProjectByUser(
+        req.body.email, 
+        res
+    );
+});
+
+app.post('/getopenproject', function(req, res){
+    console.log("get project");
+    db.getOpenProject(
+        res
+    );
+});
+
+app.post('/getbidbyuser', function(req, res){
+    console.log("get bid");
+    db.getBidsByUser(
+        req.body.email, 
         res
     );
 });
@@ -118,12 +142,12 @@ app.post('/getbid', function(req, res){
     );
 });
 
-app.get('/api/img', function (req, res) {
-    res.sendFile('public/img/'+req.param('path'));
+app.get('/api/img/:path', function (req, res) {
+    res.sendFile('public/img/'+req.param.path);
 });
 
-app.get('/api/file', function (req, res) {
-    res.sendFile('public/file/'+req.param('path'));
+app.get('/api/file/:path', function (req, res) {
+    res.sendFile('public/file/'+req.param.path);
 });
 
 //     app.post('/comfirm', function(req, res){

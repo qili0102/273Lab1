@@ -1,12 +1,23 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {signoutAction} from './actions'
+import {signoutAction, signinAction} from './actions'
 import store from './store'
 import {Link, withRouter} from 'react-router-dom'
+import axios from 'axios'
 
 class NavBar extends React.Component{
     constructor(props){
         super(props);
+    }
+
+    componentWillMount(){
+        if (sessionStorage.getItem('Email')) {
+            axios.post('/getuser', {email:sessionStorage.getItem('Email')}).then((response)=>{
+                    // dispatch(signinAction(response.data));
+                    this.props.setUser(response.data);
+                } 
+            )
+        }
     }
 
     signclick(){
@@ -32,7 +43,7 @@ class NavBar extends React.Component{
                 <ul className="nav navbar-nav">
                         <li ><Link to="/">Home</Link></li>
                         <li onClick={this.signclick.bind(this)}><Link to="/login">Sign Out</Link></li>
-                        <li ><a href="#">My Account</a></li>
+                        <li ><Link to="/profile">My Account</Link></li>
                 </ul>
             );
         }
@@ -58,6 +69,7 @@ class NavBar extends React.Component{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
+        setUser:(payload)=>dispatch(signinAction(payload)),
         signupClick: () => dispatch(signoutAction())
     };
 }
@@ -65,8 +77,9 @@ const mapDispatchToProps = (dispatch)=>{
 const mapStateToProps = (state) => {
     return {
         login: state.login,
-        username: state.username,
-        password: state.password
+        user_info: state.user_info,
+        projects:state.projects,
+        bids:state.bids
     };
 }
 

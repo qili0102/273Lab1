@@ -2,7 +2,7 @@ import React from 'react';
 import store from './store';
 import {Redirect} from 'react-router';
 import axios from 'axios';
-import {signinAction,checkEmail} from './actions';
+import {signinAction} from './actions';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom'
 
@@ -26,10 +26,14 @@ class LogIn extends React.Component{
         // let status;
         // this.getUser().then(response=>status = response.status)
         // if (status=="200") {
-            this.props.userclick({email:this.refs['email'].value});
+            // this.props.userclick({email:this.refs['email'].value});
         // }
-        sessionStorage.setItem('User',store.getState().username);
+        this.props.testclick({email:this.refs['email'].value, password: this.refs['pwd'].value});
     }
+
+    // componentDidMount(){
+    //     this.props.testclick
+    // }
 
     render(){
         if(!sessionStorage.getItem('User')){
@@ -53,7 +57,7 @@ class LogIn extends React.Component{
             )
         }
         else{
-            this.props.testclick()
+            // this.props.testclick()
             return (
                 <Redirect to="/" />
             );
@@ -63,8 +67,16 @@ class LogIn extends React.Component{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        testclick: (payload) => dispatch(signinAction(payload)),
-        userclick: (payload) => dispatch(checkEmail(payload))
+        testclick: (payload) => {
+            axios.post('/getuser', {email:payload.email}).then((response)=>{
+                if (response.status===200 && response.data.password===payload.password) {
+                    dispatch(signinAction(response.data));
+                } else {
+                    alert("try again?");
+                }
+            })
+        },
+        // userclick: (payload) => dispatch(checkEmail(payload))
     };
 }
 
@@ -73,7 +85,7 @@ const mapStateToProps = (state) => {
         // login: state.login,
         // username: state.username,
         // password: state.password
-        login: false,
+        login: state.login,
         user_info: state.user_info,
         projects:state.projects,
         bids:state.bids

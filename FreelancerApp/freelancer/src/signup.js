@@ -2,64 +2,56 @@ import React from 'react';
 import store from './store';
 import {Redirect} from 'react-router';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom'
 
 class Signup extends React.Component{
-    constructor(){
-        super()
-        this.state = {
-            username: '',
-            status:"",
-            msg:""
-          }
+    constructor(props){
+        super(props);
+        this.state ={
+            redirect:false
+        }
+        
     }
 
     click(event){
         event.preventDefault();
-        // alert("click");
-        // axios.post('/adduser',{
-        //     username : this.refs['username'].value,
-        //     password: this.refs['pwd'].value
-        // }).then(function (response) {
-        //     console.log(response.status);
-        //   })
-        //   .catch(function (error) {
-        //     alert(error);
-        //   });
-        this.getUser().then(response=>this.setState({username: response.data.username, status: response.status}))
-        if (this.state.status=="200") {
-            this.setState({msg : "Try another name"});
+        let user_signup={
+            email:"",
+            username:"",
+            password:"",
+            img_path:"",
+            desc:"",
+            skills:"",
+            post_prj:"",
+            bid_prj:""
         }
-        if (this.state.status=="203") {
-            this.state.msg ="Try another name";
-        }
-        if (this.state.status=="204") {
-            axios.post('/adduser',{
-            username : this.refs['username'].value,
-            password: this.refs['pwd'].value
-            })
-        }
-        this.setState({
-            username: '',
-            status:"",
-            msg:""
-          })
-    }
+        user_signup.email = this.refs['email'].value;
+        user_signup.password = this.refs['pwd'].value;
+        user_signup.username = this.refs['username'].value;
 
-    getUser(){
-        return axios.post('/comfirm', {
-            username : this.refs['username'].value,
-            password: this.refs['pwd'].value
+        axios.post('/adduser', user_signup).then((response)=>{
+            alert(response.status)
+            if (response.status==201) {
+                alert("Sign up successful!");
+                this.setState({redirect:true});
+            } else if (response.status==400){
+                alert("Sign up failure! Try another email?");
+            }
         });
     }
 
     render(){
-        if(store.getState().login==false){
+        if(this.state.redirect===false){
             return (
                 <div className = "row">
-                <h1>Register</h1>
-                {this.state.status}
+                <h1>Register</h1> 
                 <div className = "col-sm-4"></div>
                 <form className = "col-sm-4">
+                    <div className="form-group">
+                        <label >Email:</label>
+                        <input type="text" className="form-control" ref="email" />
+                    </div>
                     <div className="form-group">
                         <label >User Name:</label>
                         <input type="text" className="form-control" ref="username" />
@@ -75,9 +67,25 @@ class Signup extends React.Component{
             )
         }
         return (
-            <Redirect to="/" />
+            <Redirect to="/login" />
         );
     }
 }
 
-export default Signup;
+const mapStateToProps = (state) => {
+    return {
+        // login: state.login,
+        // username: state.username,
+        // password: state.password
+        login: state.login,
+        user_info: state.user_info,
+        projects:state.projects,
+        bids:state.bids
+    };
+}
+
+const DefaultApp = withRouter(connect(
+    mapStateToProps
+)(Signup))
+
+export default DefaultApp;

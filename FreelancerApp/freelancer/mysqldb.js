@@ -32,10 +32,13 @@ const bids_table = 'bids';
 const select_user_query_by_email="select * from "+users_table+" where email = ?";
 const select_project_by_id="select * from "+projects_table+" where id = ?";
 const select_bid_by_id = "select * from "+bids_table+" where id = ?";
+const select_project_by_user="select * from "+projects_table+" where post_user = ?";
+const select_bid_by_user="select * from "+bids_table+" where user = ?";
+const select_open_project="select * from "+projects_table+" where status = 'open'";
 
-const insert_user = "INSERT INTO "+users_table+" (email, username, password, img_path, desc, skills, post_prj, bid_prj) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-const insert_project = "INSERT INTO "+projects_table+" (title, desc, file_path, skills, budget_range, post_user, status, bid_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-const insert_bid = "INSERT INTO "+bids_table+" (user, project, price, period, won) VALUES (?, ?, ?, ?, ?)";
+const insert_user = "INSERT INTO "+users_table+" (`email`, `username`, `password`, `img_path`, `desc`, `skills`, `post_prj`, `bid_prj`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+const insert_project = "INSERT INTO "+projects_table+" (`title`, `desc`, `file_path`, `skills`, `budget_range`, `post_user`, `status`, `bid_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+const insert_bid = "INSERT INTO "+bids_table+" (`user`, `project`, `price`, `period`, `won`) VALUES (?, ?, ?, ?, ?)";
 
 const update_user = "UPDATE "+users_table+" SET username=?, password=?, img_path=?, desc=?, skills=?, post_prj=?, bid_prj=? WHERE email=?";
 const update_project = "UPDATE "+projects_table+" SET title=?, desc=?, file_path=?, skills=?, budget_range=?, post_user=?, status=?, bid=? WHERE id=?";
@@ -82,6 +85,84 @@ exports.getProject=function (id, res) {
                 if (!err) {
                     console.log(results[0]);
                     res.status(200).send(results[0]);
+                }else{
+                    res.status(400).send('project getting error');
+                    return;
+                }
+            });
+            connection.on('error', function (err) {
+                res.status(400).send('Error on db operation');
+                return;
+            })
+        }
+    })
+};
+
+exports.getProjectByUser=function (email, res) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log("db connection failed");
+            res.status(400).send('db failed');
+            return;
+        }else{
+            console.log("db connected");
+            connection.query(select_project_by_user,[email], function (err, results) {
+                connection.release();
+                if (!err) {
+                    console.log(results);
+                    res.status(200).send(results);
+                }else{
+                    res.status(400).send('project getting error');
+                    return;
+                }
+            });
+            connection.on('error', function (err) {
+                res.status(400).send('Error on db operation');
+                return;
+            })
+        }
+    })
+};
+
+exports.getOpenProject=function (res) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log("db connection failed");
+            res.status(400).send('db failed');
+            return;
+        }else{
+            console.log("db connected");
+            connection.query(select_open_project, function (err, results) {
+                connection.release();
+                if (!err) {
+                    console.log(results);
+                    res.status(200).send(results);
+                }else{
+                    res.status(400).send('project getting error');
+                    return;
+                }
+            });
+            connection.on('error', function (err) {
+                res.status(400).send('Error on db operation');
+                return;
+            })
+        }
+    })
+};
+
+exports.getBidsByUser=function (email, res) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log("db connection failed");
+            res.status(400).send('db failed');
+            return;
+        }else{
+            console.log("db connected");
+            connection.query(select_bid_by_user,[email], function (err, results) {
+                connection.release();
+                if (!err) {
+                    console.log(results);
+                    res.status(200).send(results);
                 }else{
                     res.status(400).send('project getting error');
                     return;
@@ -154,7 +235,7 @@ exports.addUser=function (email, username, password, img_path, desc, skills, pos
             res.status(500).send('db failed');
             return;
         }else{
-            console.log("db connected");
+            console.log("db connected" + insert_user);
             connection.query(insert_user,[email, username, password, img_path, desc, skills, post_prj, bid_prj], function (err, results) {
                 connection.release();
                 if (!err) {
@@ -162,7 +243,7 @@ exports.addUser=function (email, username, password, img_path, desc, skills, pos
                     res.status(201).send('inserted');
                 }
                 else{
-                    res.status(201).send('insert failed');
+                    res.status(400).send('insert failed'+err.message);
                     return;
                 }
             });

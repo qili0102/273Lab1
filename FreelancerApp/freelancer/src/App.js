@@ -7,6 +7,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from './home';
 import LogIn from './signin';
 import Signup from './signup';
+import Profile from './userprofile';
 
 class App extends Component {
   render() {
@@ -21,7 +22,8 @@ class App extends Component {
         <div>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={LogIn} />
-          <Route path="/register" component={Signup} />    
+          <Route path="/register" component={Signup} />   
+          <Route path="/profile" component={Profile} /> 
         </div>
       </div>
       </Router>

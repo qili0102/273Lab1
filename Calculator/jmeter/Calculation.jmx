@@ -31,7 +31,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;equation&quot;:${v1}}</stringProp>
+                <stringProp name="Argument.value">{&quot;equation&quot;:&quot;${v1}-${v2}&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -127,10 +127,19 @@
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable_1" enabled="true">
           <stringProp name="maximumValue">999</stringProp>
           <stringProp name="minimumValue">1</stringProp>
-          <stringProp name="outputFormat">&quot;123*456&quot;</stringProp>
+          <stringProp name="outputFormat"></stringProp>
           <boolProp name="perThread">false</boolProp>
-          <stringProp name="randomSeed"></stringProp>
+          <stringProp name="randomSeed">__time()</stringProp>
           <stringProp name="variableName">v1</stringProp>
+        </RandomVariableConfig>
+        <hashTree/>
+        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable_2" enabled="true">
+          <stringProp name="maximumValue">999</stringProp>
+          <stringProp name="minimumValue">1</stringProp>
+          <stringProp name="outputFormat"></stringProp>
+          <boolProp name="perThread">false</boolProp>
+          <stringProp name="randomSeed">__time()</stringProp>
+          <stringProp name="variableName">v2</stringProp>
         </RandomVariableConfig>
         <hashTree/>
       </hashTree>
