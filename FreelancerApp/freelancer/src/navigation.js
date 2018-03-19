@@ -42,6 +42,7 @@ class NavBar extends React.Component{
             return (
                 <ul className="nav navbar-nav">
                         <li ><Link to="/">Home</Link></li>
+                        <li ><Link to="/dashboard">Dashboard</Link></li>
                         <li onClick={this.signclick.bind(this)}><Link to="/login">Sign Out</Link></li>
                         <li ><Link to="/profile">My Account</Link></li>
                 </ul>

@@ -4,7 +4,8 @@ import {Redirect} from 'react-router';
 import axios from 'axios';
 import {signinAction} from './actions';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+var bcrypt = require('bcryptjs');
 
 class LogIn extends React.Component{
     constructor(props){
@@ -69,7 +70,8 @@ const mapDispatchToProps = (dispatch)=>{
     return {
         testclick: (payload) => {
             axios.post('/getuser', {email:payload.email}).then((response)=>{
-                if (response.status===200 && response.data.password===payload.password) {
+                var passwordIsValid = bcrypt.compareSync(payload.password, response.data.password);
+                if (response.status===200 && passwordIsValid) {
                     dispatch(signinAction(response.data));
                 } else {
                     alert("try again?");

@@ -8,6 +8,7 @@ import Home from './home';
 import LogIn from './signin';
 import Signup from './signup';
 import Profile from './userprofile';
+import Dashboard from './dashboard';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path="/login" component={LogIn} />
           <Route path="/register" component={Signup} />   
           <Route path="/profile" component={Profile} /> 
+          <Route path="/dashboard" component={Dashboard} /> 
         </div>
       </div>
       </Router>

@@ -1,10 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var db = require('./mysqldb');
+// var config = require('./config');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+
+
 
 // app.get('/index', function (req, res) {
 //     console.log('index');
@@ -173,8 +176,6 @@ app.get('/api/file/:path', function (req, res) {
 //             }
 //         });
 //     });
-
-
 
 app.listen(5000, function(){
     console.log('listening to this joint on port 5000');

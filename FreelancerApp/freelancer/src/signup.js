@@ -3,7 +3,8 @@ import store from './store';
 import {Redirect} from 'react-router';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+var bcrypt = require('bcryptjs');
 
 class Signup extends React.Component{
     constructor(props){
@@ -26,8 +27,10 @@ class Signup extends React.Component{
             post_prj:"",
             bid_prj:""
         }
+
+        var hashedPwd = bcrypt.hashSync(this.refs['pwd'].value, 8)
         user_signup.email = this.refs['email'].value;
-        user_signup.password = this.refs['pwd'].value;
+        user_signup.password = hashedPwd;
         user_signup.username = this.refs['username'].value;
 
         axios.post('/adduser', user_signup).then((response)=>{

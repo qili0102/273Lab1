@@ -1,4 +1,6 @@
 var mysql = require('mysql');
+var jwt = require('jsonwebtoken');
+// var config = require('./config');
 
 // Simple mysql connection
 // var connection = mysql.createConnection({
@@ -33,7 +35,8 @@ const select_user_query_by_email="select * from "+users_table+" where email = ?"
 const select_project_by_id="select * from "+projects_table+" where id = ?";
 const select_bid_by_id = "select * from "+bids_table+" where id = ?";
 const select_project_by_user="select * from "+projects_table+" where post_user = ?";
-const select_bid_by_user="select * from "+bids_table+" where user = ?";
+const select_bid_by_user='select * from ' + bids_table +' join '+projects_table +' on bids.project = projects.id' +
+' where user = ?';
 const select_open_project="select * from "+projects_table+" where status = 'open'";
 
 const insert_user = "INSERT INTO "+users_table+" (`email`, `username`, `password`, `img_path`, `desc`, `skills`, `post_prj`, `bid_prj`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -240,7 +243,11 @@ exports.addUser=function (email, username, password, img_path, desc, skills, pos
                 connection.release();
                 if (!err) {
                     console.log("inserted");
-                    res.status(201).send('inserted');
+                    // var token = jwt.sign({email:email},config.secret, {
+                    //     expiresIn: 86400 //expires in 24 hours
+                    // });
+                    // res.status(201).send({auth: true, token: token});
+                    res.status(201).send("inserted");
                 }
                 else{
                     res.status(400).send('insert failed'+err.message);

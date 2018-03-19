@@ -2,21 +2,19 @@ import React from 'react';
 import store from './store';
 import {Redirect} from 'react-router';
 import axios from 'axios';
-import {signinAction, getProjectAction} from './actions';
+import {signinAction, getProjectAction, getBidAction} from './actions';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import img from './img/favicon.ico';
 
-function NumberList(props) {
+function BidList(props) {
     const numbers = props.numbers;
     const listItems = numbers.map((number) =>
     <li>
-          <p>Title: {number.title}</p>
+        {/* {JSON.stringify(number)} */}
+          <p>Project Title: {number.title}</p>
             <p>Employer: {number.post_user}</p>
-            <p>Desciption: {number.desc}</p>
-            <p>Skills Required: {number.skills}</p>
-            <p>Budget Range: {number.budgetRange}</p>
-            <p>Status: {number.status} <button type="button" className="btn btn-default">Bid</button></p>
+            <p>Price: {number.price}</p>
+            <p> <button type="button" class="btn btn-default">Bid</button></p>
     </li>
     );
     return (
@@ -24,7 +22,7 @@ function NumberList(props) {
     );
   }
 
-class Home extends React.Component{
+class Dashboard extends React.Component{
 
     constructor(props){
         super(props);
@@ -32,10 +30,10 @@ class Home extends React.Component{
 
     componentWillMount(){
         if (sessionStorage.getItem('Email')) {
-            axios.post('/getopenproject').then((response)=>{
+            axios.post('/getbidbyuser', {email:sessionStorage.getItem('Email')}).then((response)=>{
                 // dispatch(signinAction(response.data));
                 // alert(response.data);
-                this.props.setProjects(response.data);
+                this.props.setBids(response.data);
             } 
         );
         }
@@ -45,15 +43,15 @@ class Home extends React.Component{
         // fetch('/index').then(res=>res.json())
         // .then(json=>console.log(json.message));
         let user = sessionStorage.getItem('User');
-        let projects = store.getState().projects;
+        let bid = store.getState().bids;
         // let listitems = projects.map((proj)=><div>{proj}</div>);
         if (user!=null) {
             return (
-                <div>Home Page, welcome {user}
+                <div>
                     <div>
                         {
-                            projects?
-                            <NumberList numbers={projects} />
+                            bid?
+                            <BidList numbers={bid} />
                             :null
                         }
                     </div>
@@ -62,7 +60,7 @@ class Home extends React.Component{
         }
         else{
             return (
-                <div>Home Page, you have not sign in {user}</div>
+                <Redirect to="/" />
             )
         }
     }
@@ -80,7 +78,8 @@ const mapDispatchToProps = (dispatch)=>{
                 }
             })
         },
-        setProjects:(payload)=>dispatch(getProjectAction(payload))
+        setProjects:(payload)=>dispatch(getProjectAction(payload)),
+        setBids:((payload)=>dispatch(getBidAction(payload)))
         // userclick: (payload) => dispatch(checkEmail(payload))
     };
 }
@@ -100,6 +99,6 @@ const mapStateToProps = (state) => {
 const DefaultApp = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Home))
+)(Dashboard))
 
 export default DefaultApp;
